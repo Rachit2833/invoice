@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
-import { Invoice, TInvoice } from '../data/types'
+import { Invoice, } from '../data/types'
 import { useDebounce } from '@uidotdev/usehooks'
 import InvoicePage from './InvoicePage'
 import FileSaver from 'file-saver'
@@ -10,31 +10,10 @@ interface Props {
   setData(data: Invoice): void
 }
 
-const Download: FC<Props> = ({ data, setData }) => {
+const Download: FC<Props> = ({ data,  }) => {
   const debounced = useDebounce(data, 500)
 
-  function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files?.length) return
-
-    const file = e.target.files[0]
-    file
-      .text()
-      .then((str: string) => {
-        try {
-          if (!(str.startsWith('{') && str.endsWith('}'))) {
-            str = atob(str)
-          }
-          const d = JSON.parse(str)
-          const dParsed = TInvoice.parse(d)
-          console.info('parsed correctly')
-          setData(dParsed)
-        } catch (e) {
-          console.error(e)
-          return
-        }
-      })
-      .catch((err) => console.error(err))
-  }
+ 
 
   function handleSaveTemplate() {
     const blob = new Blob([JSON.stringify(debounced)], {
@@ -64,8 +43,8 @@ const Download: FC<Props> = ({ data, setData }) => {
       />
       <p className="text-small">Save Template</p>
 
-     
-
+    
+ 
     </div>
   )
 }
